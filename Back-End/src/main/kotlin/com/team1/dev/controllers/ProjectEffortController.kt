@@ -1,4 +1,4 @@
-package com.team1.dev.Controllers
+package com.team1.dev.controllers
 
 import com.team1.dev.entities.ProjectEffort
 import com.team1.dev.services.ProjectEffortService

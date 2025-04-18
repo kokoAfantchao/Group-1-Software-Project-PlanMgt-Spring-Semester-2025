@@ -3,6 +3,7 @@ package com.team1.dev.controllers
 import com.team1.dev.entities.ProjectManager // Fixed package name for entities
 import com.team1.dev.services.ProjectManagerService // Fixed package name for services
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -14,8 +15,14 @@ class ProjectManagerController @Autowired constructor(
     @GetMapping("/all")
     fun getAllProjectManagers(): List<ProjectManager> = projectManagerService.getAllProjectManagers()
 
+
     @GetMapping("/{id}")
-    fun getProjectManagerById(@PathVariable id: Long): ProjectManager? = projectManagerService.getProjectManagerById(id)
+    fun getProjectManagerById(@PathVariable id: Long): ResponseEntity<ProjectManager> {
+        val projectManager = projectManagerService.getProjectManagerById(id)
+        return if (projectManager != null) ResponseEntity.ok(projectManager) // Should return 200 OK if manager is found
+        else ResponseEntity.notFound().build() // Should return 404 Not Found if the manager is not found.
+    }
+
 
     @PostMapping("/create")
     fun createProjectManager(@RequestBody projectManager: ProjectManager): ProjectManager = projectManagerService.createProjectManager(projectManager)

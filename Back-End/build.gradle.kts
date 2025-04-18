@@ -40,7 +40,10 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("org.mockito:mockito-core")
+	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 kotlin {
 	jvmToolchain(18)
@@ -58,15 +61,15 @@ allOpen {
 
 }
 
-//tasks.withType<Test> {
-//	useJUnitPlatform()
-//}
-//
-//tasks.test {
-//	outputs.dir(project.extra["snippetsDir"]!!)
-//}
-//
-//tasks.asciidoctor {
-//	inputs.dir(project.extra["snippetsDir"]!!)
-//	dependsOn(tasks.test)
-//}
+tasks.withType<Test> {
+	useJUnitPlatform()
+}
+
+tasks.test {
+	outputs.dir(project.extra["snippetsDir"]!!)
+}
+
+tasks.asciidoctor {
+	inputs.dir(project.extra["snippetsDir"]!!)
+	dependsOn(tasks.test)
+}
