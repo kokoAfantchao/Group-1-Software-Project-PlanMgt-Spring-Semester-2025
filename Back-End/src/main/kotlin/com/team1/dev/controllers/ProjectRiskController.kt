@@ -12,6 +12,10 @@ class ProjectRiskController(private val projectRiskService: ProjectRiskService) 
     @GetMapping
     fun getAllProjectRisks(): List<ProjectRisk> = projectRiskService.getAllRisks()
 
+    @GetMapping("/sortedByProjectId")
+    fun getAllProjectRisksSortedByProjectId(): List<ProjectRisk> =
+        projectRiskService.getAllRisksSortedByProjectId()
+
     @GetMapping("/{id}")
     fun getProjectRiskById(@PathVariable id: Int): ResponseEntity<ProjectRisk> {
         val projectRisk = projectRiskService.getRiskById(id)

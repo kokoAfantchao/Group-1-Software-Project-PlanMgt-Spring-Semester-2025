@@ -3,6 +3,7 @@ package com.team1.dev.services
 import com.team1.dev.entities.ProjectManager
 import com.team1.dev.repositories.ProjectManagerRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Sort
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -14,6 +15,7 @@ class ProjectManagerService  @Autowired constructor(
 ) {
 
     fun getAllProjectManagers(): List<ProjectManager> = projectManagerRepository.findAll()
+    fun getAllProjectManagersSortedByProjectId(): List<ProjectManager> = projectManagerRepository.findAll(Sort.by("projectId"))
 
     fun getProjectManagerById(id: Long): ProjectManager? = projectManagerRepository.findById(id).orElse(null)
 

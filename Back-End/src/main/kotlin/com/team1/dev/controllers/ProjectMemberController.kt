@@ -12,6 +12,9 @@ class ProjectMemberController(private val projectMemberService: ProjectMemberSer
     @GetMapping
     fun getAllProjectMembers(): List<ProjectMember> = projectMemberService.getAllProjectMembers()
 
+    @GetMapping("/sortedByProjectId")
+    fun getAllProjectMembersSortedByProjectId(): List<ProjectMember> =
+        projectMemberService.getAllProjectMembersSortedByProjectId()
     @GetMapping("/{id}")
     fun getProjectMemberById(@PathVariable id: Int): ResponseEntity<ProjectMember> {
         val projectMember = projectMemberService.getProjectMemberById(id)

@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/project-efforts")
 class ProjectEffortController(private val projectEffortService: ProjectEffortService) {
 
-    @GetMapping
+    @GetMapping("/all")
     fun getAllProjectEfforts(): List<ProjectEffort> = projectEffortService.getAllProjectEfforts()
+
+    @GetMapping("/sortedByProjectId")
+    fun getAllEffortsSortedByProjectId(): List<ProjectEffort> = projectEffortService.getAllEffortsSortedByProjectId()
 
     @GetMapping("/{id}")
     fun getProjectEffortById(@PathVariable id: Int): ResponseEntity<ProjectEffort> {
