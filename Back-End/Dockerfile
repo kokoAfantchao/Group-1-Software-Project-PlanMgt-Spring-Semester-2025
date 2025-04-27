@@ -12,13 +12,13 @@ COPY src ./src
 RUN pwd 
 RUN ls -al  
 # Build the application
-RUN ./gradlew bootRun     
+RUN ./gradlew build      
 
 # Use an official OpenJDK runtime for the final image
 FROM openjdk:18-jdk-slim
 
 # Set the working directory inside the container
-#WORKDIR /app
+WORKDIR /app
 
 # Copy the built Spring Boot JAR file from the build stage
 COPY --from=build /app/build/libs/*.jar app.jar
