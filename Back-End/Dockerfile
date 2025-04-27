@@ -6,7 +6,7 @@ FROM gradle:8.2.1-jdk17 AS build
 WORKDIR /app
 
 # Copy the Gradle project files
-COPY build.gradle settings.gradle ./
+COPY build.gradle.kts settings.gradle.kts ./
 COPY gradle ./gradle
 COPY src ./src
 RUN pwd 
