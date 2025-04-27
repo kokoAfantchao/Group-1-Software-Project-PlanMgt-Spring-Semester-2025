@@ -1,6 +1,6 @@
 
 # Use Gradle to build the application
-FROM gradle:8.2.1-jdk18 AS build
+FROM gradle:8.2.1-jdk17 AS build
 
 # Set the working directory for the build
 WORKDIR /app
