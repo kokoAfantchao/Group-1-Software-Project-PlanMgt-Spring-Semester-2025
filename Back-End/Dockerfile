@@ -1,20 +1,21 @@
 
 # Use Gradle to build the application
-FROM gradle:8.2.1-jdk17 AS build
+FROM gradle:8.2.1-jdk18 AS build
 
 # Set the working directory for the build
 WORKDIR /app
 
 # Copy the Gradle project files
-COPY build.gradle settings.gradle ./
-COPY gradle ./gradle
-COPY src ./src
-
+#COPY build.gradle settings.gradle ./
+#COPY gradle ./gradle
+#COPY src ./src
+RUN pwd 
+RUN ls -al  
 # Build the application
-RUN gradle clean build -x test
+RUN ./gradlew bootRun     
 
 # Use an official OpenJDK runtime for the final image
-FROM openjdk:17-jdk-slim
+FROM openjdk:18-jdk-slim
 
 # Set the working directory inside the container
 WORKDIR /app
