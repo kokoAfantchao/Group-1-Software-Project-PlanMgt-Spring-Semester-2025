@@ -8,6 +8,8 @@ WORKDIR /app
 # Copy the Gradle project files
 COPY build.gradle.kts settings.gradle.kts ./
 COPY gradle ./gradle
+COPY gradlew ./gradlew
+RUN chmod +x ./gradlew
 COPY src ./src
 RUN pwd 
 RUN ls -al  
