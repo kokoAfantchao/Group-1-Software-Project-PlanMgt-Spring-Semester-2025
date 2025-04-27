@@ -1,28 +1,29 @@
 
-# Use Maven to build the application
-FROM maven:3.9.4-eclipse-temurin-17 AS build
+# Use Gradle to build the application
+FROM gradle:8.2.1-jdk17 AS build
 
 # Set the working directory for the build
 WORKDIR /app
 
-# Copy the Maven project files
-COPY pom.xml ./
+# Copy the Gradle project files
+COPY build.gradle settings.gradle ./
+COPY gradle ./gradle
 COPY src ./src
 
 # Build the application
-RUN mvn clean package -DskipTests
+RUN gradle clean build -x test
 
 # Use an official OpenJDK runtime for the final image
-FROM openjdk:18-jdk-slim
+FROM openjdk:17-jdk-slim
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the built JAR file from the build stage
-COPY --from=build /app/target/*.jar app.jar
+# Copy the built Spring Boot JAR file from the build stage
+COPY --from=build /app/build/libs/*.jar app.jar
 
-# Expose the port the app runs on
+# Expose the default Spring Boot port
 EXPOSE 8080
 
-# Define the command to run the app
-CMD ["java", "-jar", "app.jar"]
+# Define the command to run the Spring Boot application
+ENTRYPOINT ["java", "-jar", "app.jar"]
