@@ -8,60 +8,87 @@
     </a>
 </header>
 <main>
-    <h2>Project Name: {{ effortTrackingData[0]?.project?.name }}</h2>
-    <h3>Effort Tracking</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Requirements Analysis</th>
-                <th>Design</th>
-                <th>Coding</th>
-                <th>Testing</th>
-                <th>Project Management</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Show a message if no effort tracking data is found -->
-            <tr *ngIf="effortTrackingData?.length === 0">
-                <td colspan="6">No effort tracking data found.</td>
-            </tr>
+  <div>
+    <h1>Effort Tracking Summary</h1>
+    <p>Project ID: {{ projectId }}</p>
 
-            <!-- Loop through the filtered effort tracking data -->
-            <tr *ngFor="let effort of effortTrackingData">
-                <td>{{ effort.entryDate | date:'mediumDate' }}</td>
-                <td>{{ effort.reqsAnalysis }}</td>
-                <td>{{ effort.design }}</td>
-                <td>{{ effort.coding }}</td>
-                <td>{{ effort.testing }}</td>
-                <td>{{ effort.projMgmt }}</td>
-            </tr>
-        </tbody>
+    <!-- Display effort tracking data -->
+    <table>
+      <thead>
+        <tr>
+          <th>Entry Date</th>
+          <th>Requirements Analysis</th>
+          <th>Design</th>
+          <th>Coding</th>
+          <th>Testing</th>
+          <th>Project Management</th>
+          <th>Total</th> <!-- New Totals Column -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let effort of effortTrackingData">
+          <td>{{ effort.entryDate }}</td>
+          <td>{{ effort.reqsAnalysis }}</td>
+          <td>{{ effort.design }}</td>
+          <td>{{ effort.coding }}</td>
+          <td>{{ effort.testing }}</td>
+          <td>{{ effort.projMgmt }}</td>
+          <td>
+            <!-- Calculate the total for the row -->
+            {{ effort.reqsAnalysis + effort.design + effort.coding + effort.testing + effort.projMgmt }}
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td><strong>Totals:</strong></td>
+          <td>{{ getTotal('reqsAnalysis') }}</td>
+          <td>{{ getTotal('design') }}</td>
+          <td>{{ getTotal('coding') }}</td>
+          <td>{{ getTotal('testing') }}</td>
+          <td>{{ getTotal('projMgmt') }}</td>
+          <td>
+            <!-- Calculate the grand total -->
+            {{ getTotal('reqsAnalysis') + getTotal('design') + getTotal('coding') + getTotal('testing') + getTotal('projMgmt') }}
+          </td>
+        </tr>
+      </tfoot>
     </table>
 
-    <button>Add New</button>
+    <!-- Button to toggle the new effort form -->
+    <button (click)="toggleNewEffortForm()">Add New Effort</button>
 
-    <h3>Effort Summary</h3>
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th>Requirements Analysis</th>
-                <th>Design</th>
-                <th>Coding</th>
-                <th>Testing</th>
-                <th>Project Management</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Total</td>
-                <td>{{ getTotal('reqsAnalysis') }}</td>
-                <td>{{ getTotal('design') }}</td>
-                <td>{{ getTotal('coding') }}</td>
-                <td>{{ getTotal('testing') }}</td>
-                <td>{{ getTotal('projMgmt') }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- New effort form -->
+    <div *ngIf="showNewEffortForm">
+      <h2>New Effort</h2>
+      <form (ngSubmit)="saveNewEffort()">
+        <label>
+          Entry Date:
+          <input type="date" [(ngModel)]="newEffort.entryDate" name="entryDate" required />
+        </label>
+        <label>
+          Requirements Analysis:
+          <input type="number" [(ngModel)]="newEffort.reqsAnalysis" name="reqsAnalysis" required />
+        </label>
+        <label>
+          Design:
+          <input type="number" [(ngModel)]="newEffort.design" name="design" required />
+        </label>
+        <label>
+          Coding:
+          <input type="number" [(ngModel)]="newEffort.coding" name="coding" required />
+        </label>
+        <label>
+          Testing:
+          <input type="number" [(ngModel)]="newEffort.testing" name="testing" required />
+        </label>
+        <label>
+          Project Management:
+          <input type="number" [(ngModel)]="newEffort.projMgmt" name="projMgmt" required />
+        </label>
+        <button type="submit">Save</button>
+        <button type="button" (click)="toggleNewEffortForm()">Cancel</button>
+      </form>
+    </div>
+  </div>
 </main>

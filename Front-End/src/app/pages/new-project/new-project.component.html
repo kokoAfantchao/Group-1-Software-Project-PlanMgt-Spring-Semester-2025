@@ -1,26 +1,23 @@
 <header>
-    <a [routerLink]="'/dashboard'" class="logo">
-        <img src="assets/SoftwareXYZlogo.png" alt="SoftwareXYZ Logo">
-    </a>
-    <h1>Effort Tracking & Summary</h1>
-    <a [routerLink]="'/dashboard'" class="home-icon">
-        <img src="assets/HomeIcon2.png" alt="Home Button" width="40" height="40">
-    </a>
+  <h1>Create New Project</h1>
+  <a [routerLink]="'/dashboard'" class="home-icon">
+    <img src="assets/HomeIcon2.png" alt="Home Button" width="40" height="40">
+  </a>
 </header>
-
+<main>
   <!-- Form Container -->
   <div class="container mt-4">
-    <form>
+    <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
 
       <!-- Top Fields -->
       <div class="text-center mb-5">
         <div class="mb-3">
           <label for="projectName" class="form-label fs-4">Project Name</label>
-          <input type="text" id="projectName" class="form-control mx-auto" style="width: 300px; background-color: #D9D9D9;">
+          <input type="text" id="projectName" formControlName="name" class="form-control mx-auto" style="width: 300px; background-color: #D9D9D9;">
         </div>
         <div class="mb-3">
           <label for="projectDetails" class="form-label fs-5">Project Details</label>
-          <textarea id="projectDetails" class="form-control mx-auto" style="width: 600px; height: 60px; background-color: #D9D9D9;"></textarea>
+          <textarea id="projectDetails" formControlName="description" class="form-control mx-auto" style="width: 600px; height: 60px; background-color: #D9D9D9;"></textarea>
         </div>
       </div>
 
@@ -30,38 +27,33 @@
         <!-- Left Column -->
         <div class="col-md-5">
           <div class="mb-3">
-            <label class="form-label fs-5">Project Description</label>
-            <textarea class="form-control" rows="3" style="background-color: #D9D9D9;"></textarea>
+            <label class="form-label fs-5">Start Date</label>
+            <input type="date" formControlName="startDate" class="form-control" style="background-color: #D9D9D9;">
           </div>
           <div class="mb-3">
-            <label class="form-label fs-5">Team Members</label>
-            <input type="text" class="form-control" style="background-color: #D9D9D9;">
-          </div>
-          <div class="mb-2">
-            <label class="form-label fs-5">Functional Requirements</label>
-            <input type="text" class="form-control mb-2" placeholder="Requirement 1" style="background-color: #D9D9D9;">
-          </div>
-          <div class="text-center mb-4">
-            <button type="button" class="btn btn-outline-dark" style="width: 310px;">Add Functional Requirement</button>
+            <label class="form-label fs-5">End Date</label>
+            <input type="date" formControlName="endDate" class="form-control" style="background-color: #D9D9D9;">
           </div>
         </div>
 
         <!-- Right Column -->
         <div class="col-md-5">
           <div class="mb-3">
-            <label class="form-label fs-5">Project Manager</label>
-            <input type="text" class="form-control" style="background-color: #D9D9D9;">
+            <label class="form-label fs-5">Status</label>
+            <select formControlName="status" class="form-control" style="background-color: #D9D9D9;">
+              <option value="Active">Active</option>
+              <option value="Completed">Completed</option>
+              <option value="On Hold">On Hold</option>
+            </select>
           </div>
           <div class="mb-3">
-            <label class="form-label fs-5">Risks & Status Field</label>
-            <input type="text" class="form-control" style="background-color: #D9D9D9;">
-          </div>
-          <div class="mb-2">
-            <label class="form-label fs-5">Nonfunctional Requirements</label>
-            <input type="text" class="form-control mb-2" placeholder="Requirement 1" style="background-color: #D9D9D9;">
-          </div>
-          <div class="text-center mb-4">
-            <button type="button" class="btn btn-outline-dark" style="width: 310px;">Add Nonfunctional Requirement</button>
+            <label class="form-label fs-5">Project Manager</label>
+            <select formControlName="managerId" class="form-control" style="background-color: #D9D9D9;">
+              <option value="" disabled>Select a manager</option>
+              <option *ngFor="let manager of managers" [value]="manager.id">
+                {{ manager.userName }} ({{ manager.email }})
+              </option>
+            </select>
           </div>
         </div>
 
@@ -69,10 +61,9 @@
 
       <!-- Save Button -->
       <div class="text-center mt-2">
-        <button type="submit" routerLink="/dashboard" class="btn" style="width: 100px; height: 50px; background-color: #B6B6B6;">Save</button>
+        <button type="submit" class="btn" style="width: 100px; height: 50px; background-color: #B6B6B6;">Save</button>
       </div>
 
     </form>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</main>

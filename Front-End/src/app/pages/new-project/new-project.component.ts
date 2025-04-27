@@ -1,18 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'; // Import ReactiveFormsModule
-import { RouterModule } from '@angular/router'; // Import RouterModule
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common'; // Import CommonModule for *ngIf and *ngFor
+import { RouterModule } from '@angular/router'; // Import RouterModule for routerLink
+import { ReactiveFormsModule } from '@angular/forms'; // Import ReactiveFormsModule for formGroup
 
 @Component({
   selector: 'app-new-project',
-  imports: [RouterModule, ReactiveFormsModule], // Import ReactiveFormsModule
   templateUrl: './new-project.component.html',
-  styleUrl: './new-project.component.css',
+  styleUrls: ['./new-project.component.css'],
   standalone: true,
+  imports: [CommonModule, RouterModule, ReactiveFormsModule], // Add required modules here
 })
-export class NewProjectComponent {
+export class NewProjectComponent implements OnInit {
   projectForm: FormGroup; // Form for project details
+  managers: any[] = []; // List of available managers
 
   constructor(
     private fb: FormBuilder,
@@ -21,29 +24,54 @@ export class NewProjectComponent {
   ) {
     // Initialize the form
     this.projectForm = this.fb.group({
-      name: [''], // Project name
-      description: [''], // Project description
-      startDate: [''], // Start date
-      endDate: [''], // End date
-      status: [''], // Project status
+      name: ['', [Validators.required]], // Project name is required
+      description: ['', [Validators.required]], // Description is required
+      startDate: ['', [Validators.required]], // Start date is required
+      endDate: ['', [Validators.required]], // End date is required
+      status: ['', [Validators.required]], // Status is required
+      managerId: ['', [Validators.required]], // Manager selection is required
+    });
+  }
+
+  ngOnInit(): void {
+    this.fetchManagers(); // Fetch the list of managers using the new method
+  }
+
+  fetchManagers(): void {
+    this.http.get('http://localhost:8080/api/project-managers/all').subscribe({
+      next: (data: any[]) => {
+        console.log('Fetched managers:', data);
+        this.managers = data; // Assign the fetched managers to the component property
+      },
+      error: (err) => {
+        console.error('Error fetching managers:', err); // Log the error
+      }
     });
   }
 
   // Submit the form data
   onSubmit(): void {
     if (this.projectForm.valid) {
-      const projectData = this.projectForm.value;
-      console.log('Submitting project data:', projectData);
+      const projectData = {
+        name: this.projectForm.value.name,
+        description: this.projectForm.value.description,
+        startDate: new Date(this.projectForm.value.startDate).toISOString().split('T')[0], // Format as YYYY-MM-DD
+        endDate: new Date(this.projectForm.value.endDate).toISOString().split('T')[0], // Format as YYYY-MM-DD
+        status: this.projectForm.value.status,
+        manager: {
+          id: this.projectForm.value.managerId, // Use the selected manager ID
+        },
+      };
 
-      // Send the data to the backend
-      this.http.post('http://localhost:8080/api/projects', projectData).subscribe({
+      console.log('Submitting project data:', projectData); // Log the data being sent
+
+      this.http.post('http://localhost:8080/api/projects/create', projectData).subscribe({
         next: (response) => {
           console.log('Project created successfully:', response);
-          // Navigate to the dashboard or another page after successful submission
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/dashboard']); // Navigate to the dashboard after success
         },
         error: (err) => {
-          console.error('Error creating project:', err);
+          console.error('Error creating project:', err); // Log the error response
         },
       });
     } else {

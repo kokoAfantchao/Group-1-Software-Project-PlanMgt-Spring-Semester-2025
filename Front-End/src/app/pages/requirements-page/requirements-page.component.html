@@ -18,13 +18,28 @@
       <h4>Functional Requirements</h4>
       <div *ngIf="functionalRequirements.length > 0; else noFunctional">
         <div *ngFor="let requirement of functionalRequirements" class="box">
-          {{ requirement.description }} (Priority: {{ requirement.priority }})
+          {{ requirement.description }} (Priority: {{ requirement.priority }}) - (Updated: {{ requirement.updatedAt | date:'short' }}))
         </div>
       </div>
       <ng-template #noFunctional>
         <p>No functional requirements found.</p>
       </ng-template>
-      <button>Add Functional Requirement</button>
+      <button (click)="toggleFunctionalForm()">Add Functional Requirement</button>
+      <div *ngIf="showFunctionalForm">
+        <h3>New Functional Requirement</h3>
+        <form (ngSubmit)="addRequirement(0)">
+          <label>
+            Description:
+            <input type="text" [(ngModel)]="newRequirement.description" name="description" required />
+          </label>
+          <label>
+            Priority:
+            <input type="number" [(ngModel)]="newRequirement.priority" name="priority" required />
+          </label>
+          <button type="submit">Save</button>
+          <button type="button" (click)="toggleFunctionalForm()">Cancel</button>
+        </form>
+      </div>
     </div>
 
     <!-- Non-Functional Requirements -->
@@ -32,13 +47,28 @@
       <h4>Non-Functional Requirements</h4>
       <div *ngIf="nonFunctionalRequirements.length > 0; else noNonFunctional">
         <div *ngFor="let requirement of nonFunctionalRequirements" class="box">
-          {{ requirement.description }} (Priority: {{ requirement.priority }})
+          {{ requirement.description }} (Priority: {{ requirement.priority }} - (Updated: {{ requirement.updatedAt | date:'short' }}))
         </div>
       </div>
       <ng-template #noNonFunctional>
         <p>No non-functional requirements found.</p>
       </ng-template>
-      <button>Add Non-Functional Requirement</button>
+      <button (click)="toggleNonFunctionalForm()">Add Non-Functional Requirement</button>
+      <div *ngIf="showNonFunctionalForm">
+        <h3>New Non-Functional Requirement</h3>
+        <form (ngSubmit)="addRequirement(1)">
+          <label>
+            Description:
+            <input type="text" [(ngModel)]="newRequirement.description" name="description" required />
+          </label>
+          <label>
+            Priority:
+            <input type="number" [(ngModel)]="newRequirement.priority" name="priority" required />
+          </label>
+          <button type="submit">Save</button>
+          <button type="button" (click)="toggleNonFunctionalForm()">Cancel</button>
+        </form>
+      </div>
     </div>
   </div>
 

@@ -17,6 +17,8 @@ export class RequirementsPageComponent implements OnInit {
   requirements: any[] = []; // To store the filtered requirements
   functionalRequirements: any[] = []; // To store functional requirements
   nonFunctionalRequirements: any[] = []; // To store non-functional requirements
+  newRequirement: any = null; // To store the new requirement
+  showNonFunctionalForm: boolean = false; // To toggle the non-functional form
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -65,5 +67,75 @@ export class RequirementsPageComponent implements OnInit {
         console.error('Error fetching requirements:', err); // Log any errors
       }
     });
+  }
+
+  addRequirement(type: number): void {
+    this.newRequirement = {
+      id: 0,
+      description: '', // Placeholder for the requirement description
+      priority: 0, // Default priority
+      type: type, // 0 for functional, 1 for non-functional
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      project: {
+        id: Number(this.projectId),
+        name: '', // Placeholder for project name
+        description: '', // Placeholder for project description
+        startDate: '', // Placeholder for project start date
+        endDate: '', // Placeholder for project end date
+        status: '', // Placeholder for project status
+        manager: {
+          id: 0, // Placeholder for manager ID
+          email: '', // Placeholder for manager email
+          userName: '', // Placeholder for manager username
+          passWord: '', // Placeholder for manager password
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      }
+    };
+
+    // Send the POST request to the backend
+    this.http.post('http://localhost:8080/api/project-requirements', this.newRequirement).subscribe({
+      next: (response) => {
+        console.log('Requirement added successfully:', response);
+        this.fetchAllRequirements(); // Refresh the requirements list
+      },
+      error: (err) => {
+        console.error('Error adding requirement:', err);
+      }
+    });
+  }
+
+  toggleNonFunctionalForm(): void {
+    this.showNonFunctionalForm = !this.showNonFunctionalForm;
+    if (this.showNonFunctionalForm) {
+      this.newRequirement = {
+        id: 0,
+        description: '', // Placeholder for the requirement description
+        priority: 0, // Default priority
+        type: 1, // Non-functional requirement
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        project: {
+          id: Number(this.projectId),
+          name: '', // Placeholder for project name
+          description: '', // Placeholder for project description
+          startDate: '', // Placeholder for project start date
+          endDate: '', // Placeholder for project end date
+          status: '', // Placeholder for project status
+          manager: {
+            id: 0, // Placeholder for manager ID
+            email: '', // Placeholder for manager email
+            userName: '', // Placeholder for manager username
+            passWord: '', // Placeholder for manager password
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+        }
+      };
+    } else {
+      this.newRequirement = null;
+    }
   }
 }
