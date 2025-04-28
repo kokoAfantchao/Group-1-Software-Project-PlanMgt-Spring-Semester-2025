@@ -25,10 +25,11 @@ WORKDIR /app
 RUN pwd 
 RUN ls -al 
 # Copy the built Spring Boot JAR file from the build stage
-COPY --from=build /app/build/libs/*.jar app.jar
+#COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /app/build/libs/*.war app.war
 
 # Expose the default Spring Boot port
 EXPOSE 8080
 
 # Define the command to run the Spring Boot application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.war"]
